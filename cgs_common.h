@@ -5,4 +5,4 @@
 #define CGS_CAT2(a, b) CGS_CAT(a, b)
 #define CGS_FUNCTION(name) CGS_CAT2(cgs_name, _##name)
 
-#endif //CGS_COMMON_H
+#endif
