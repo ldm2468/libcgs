@@ -3,5 +3,5 @@ project(cgs_test C)
 
 set(CMAKE_C_STANDARD 90)
 
-add_executable(cgs_test vector.c ../cgs_vector.h ../cgs_common.h)
+add_executable(cgs_test vector.c ../cgs_vector.h ../cgs_common.h cnit/cnit.h cnit/cnit_main.h)
 target_include_directories(cgs_test PRIVATE ..)
