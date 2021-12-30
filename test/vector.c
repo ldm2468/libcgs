@@ -2,10 +2,12 @@
 #define cgs_name dvec
 #include "cgs_vector.h"
 #define cgs_dvec 1
+
 #define cgs_type int
 #define cgs_name ivec
 #include "cgs_vector.h"
 #define cgs_ivec 1
+
 #define cgs_type char *
 #define cgs_name svec
 #include "cgs_vector.h"
