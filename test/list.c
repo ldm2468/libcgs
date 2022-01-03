@@ -24,13 +24,17 @@ int test_sanity() {
 
 int test_foreach() {
     ilist *list = ilist_new();
+    ilist_push_back(list, 4);
     ilist_push_back(list, 1);
     ilist_push_back(list, 2);
     ilist_push_back(list, 3);
     ilist_push_back(list, 4);
+    ilist_push_back(list, 1);
+
+    CNIT_ASSERT(list->size == 6);
 
     {
-        int target[] = {1, 2, 3, 4};
+        int target[] = {4, 1, 2, 3, 4, 1};
         int j = 0;
         cgs_list_foreach(ilist, list, n, i) {
             CNIT_ASSERT(i == target[j++]);
@@ -42,10 +46,10 @@ int test_foreach() {
         }
     }
 
-    CNIT_ASSERT(list->size == 8);
+    CNIT_ASSERT(list->size == 12);
 
     {
-        int target[] = {1, 0, 2, 0, 5, 3, 5, 4};
+        int target[] = {5, 4, 1, 0, 2, 0, 5, 3, 5, 4, 1, 0};
         int j = 0;
         cgs_list_foreach(ilist, list, _, i) {
             CNIT_ASSERT(i == target[j++]);
