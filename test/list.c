@@ -22,6 +22,35 @@ int test_sanity() {
     return 0;
 }
 
+int test_push_pop() {
+    dlist *list = dlist_new();
+
+    for (int i = 0; i < TEST_COUNT; i++) {
+        dlist_push_front(list, i);
+    }
+
+    CNIT_ASSERT(list->size == TEST_COUNT);
+
+    for (int i = 0; i < TEST_COUNT; i++) {
+        CNIT_ASSERT(dlist_pop_back(list) == i);
+        CNIT_ASSERT(list->size == TEST_COUNT - 1 - i);
+    }
+
+    for (int i = 0; i < TEST_COUNT; i++) {
+        dlist_push_back(list, i);
+    }
+
+    CNIT_ASSERT(list->size == TEST_COUNT);
+
+    for (int i = 0; i < TEST_COUNT; i++) {
+        CNIT_ASSERT(dlist_pop_front(list) == i);
+        CNIT_ASSERT(list->size == TEST_COUNT - 1 - i);
+    }
+
+    dlist_free(list);
+    return 0;
+}
+
 int test_foreach() {
     ilist *list = ilist_new();
     ilist_push_back(list, 4);
@@ -62,6 +91,7 @@ int test_foreach() {
 
 int main() {
     cnit_add_test(test_sanity, "List sanity test");
+    cnit_add_test(test_push_pop, "List push/pop");
     cnit_add_test(test_foreach, "List foreach");
     return cnit_run_tests();
 }
