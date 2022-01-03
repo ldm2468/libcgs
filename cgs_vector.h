@@ -5,7 +5,7 @@
 #include <assert.h>
 
 /* semi include guard */
-#if !CGS_CAT2(cgs_, cgs_name)
+#if !CGS_CAT(cgs, cgs_name)
 
 #define CGS_VECTOR_INIT_CAPACITY 8
 
