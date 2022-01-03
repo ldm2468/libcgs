@@ -7,6 +7,8 @@
 /* semi include guard */
 #if !CGS_CAT(cgs, cgs_name)
 
+typedef cgs_type CGS_FUNCTION(type);
+
 #define CGS_VECTOR_INIT_CAPACITY 8
 
 typedef struct {

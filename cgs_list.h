@@ -7,24 +7,16 @@
 /* Common macros (include only once) */
 #ifndef CGS_LIST_H
 #define CGS_LIST_H
-#define cgs_list_foreach(n, l, e) for (CGS_CAT(n, node) *(e) = CGS_CAT(n, front)(l); \
-                                      (e) != &(l)->root; (e) = (e)->next)
-#define cgs_list_foreach_rev(n, l, e) for (CGS_CAT(n, node) *(e) = CGS_CAT(n, back)(l); \
-                                          (e) != &(l)->root; (e) = (e)->prev)
-#define cgs_list_foreach_erase(n, l, e) do {                                      \
-                                            CGS_CAT(n, node) *e##__p = (e)->prev; \
-                                            CGS_CAT(n, erase)(l, e);              \
-                                            (e) = e##__p;                         \
-                                        } while (0)
-#define cgs_list_foreach_rev_erase(n, l, e) do {                                      \
-                                                CGS_CAT(n, node) *e##__p = (e)->next; \
-                                                CGS_CAT(n, erase)(l, e);              \
-                                                (e) = e##__p;                         \
-                                            } while (0)
+#define cgs_list_foreach(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, front)(l), *n##__n = n->next; n; n = NULL) \
+                                         for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->next, e = n->dat)
+#define cgs_list_foreach_r(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, back)(l), *n##__n = n->prev; n; n = NULL) \
+                                           for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->prev, e = n->dat)
 #endif
 
 /* semi include guard */
 #if !CGS_CAT(cgs, cgs_name)
+
+typedef cgs_type CGS_FUNCTION(type);
 
 typedef struct CGS_FUNCTION(node) {
     cgs_type dat;
