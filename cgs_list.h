@@ -7,9 +7,9 @@
 /* Common macros (include only once) */
 #ifndef CGS_LIST_H
 #define CGS_LIST_H
-#define cgs_list_foreach(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, front)(l), *n##__n = n->next; n; n = NULL) \
+#define cgs_list_foreach(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, front_node)(l), *n##__n = n->next; n; n = NULL) \
                                          for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->next, e = n->dat)
-#define cgs_list_foreach_r(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, back)(l), *n##__n = n->prev; n; n = NULL) \
+#define cgs_list_foreach_r(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, back_node)(l), *n##__n = n->prev; n; n = NULL) \
                                            for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->prev, e = n->dat)
 #endif
 
@@ -33,6 +33,10 @@ static inline cgs_name *CGS_FUNCTION(new)() {
     res->size = 0;
     res->root.prev = res->root.next = &res->root;
     return res;
+}
+
+static inline bool CGS_FUNCTION(empty)(cgs_name *l) {
+    return l->size == 0;
 }
 
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_name *l, CGS_FUNCTION(node) *n, cgs_type e) {
@@ -73,6 +77,40 @@ static inline void CGS_FUNCTION(erase)(cgs_name *l, CGS_FUNCTION(node) *n) {
     l->size--;
 }
 
+static inline void CGS_FUNCTION(splice_after)(cgs_name *t, cgs_name *f, CGS_FUNCTION(node) *n) {
+    if (f->size == 0) {
+        return;
+    }
+
+    n->next->prev = f->root.prev;
+    f->root.prev->next = n->next;
+
+    n->next = f->root.next;
+    f->root.next->prev = n;
+
+    f->root.next = f->root.prev = &f->root;
+
+    t->size += f->size;
+    f->size = 0;
+}
+
+static inline void CGS_FUNCTION(splice_before)(cgs_name *t, cgs_name *f, CGS_FUNCTION(node) *n) {
+    if (f->size == 0) {
+        return;
+    }
+
+    n->prev->next = f->root.next;
+    f->root.next->prev = n->prev;
+
+    n->prev = f->root.prev;
+    f->root.prev->next = n;
+
+    f->root.next = f->root.prev = &f->root;
+
+    t->size += f->size;
+    f->size = 0;
+}
+
 static inline void CGS_FUNCTION(push_back)(cgs_name *l, cgs_type e) {
     CGS_FUNCTION(insert_before)(l, &l->root, e);
 }
@@ -93,14 +131,26 @@ static inline cgs_type CGS_FUNCTION(pop_front)(cgs_name *l) {
     return res;
 }
 
-static inline CGS_FUNCTION(node) *CGS_FUNCTION(front)(cgs_name *l) {
-    assert(l->size > 0);
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(front_node)(cgs_name *l) {
     return l->root.next;
 }
 
-static inline CGS_FUNCTION(node) *CGS_FUNCTION(back)(cgs_name *l) {
-    assert(l->size > 0);
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(back_node)(cgs_name *l) {
     return l->root.prev;
+}
+
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(sentinel_node)(cgs_name *l) {
+    return &l->root;
+}
+
+static inline cgs_type CGS_FUNCTION(front)(cgs_name *l) {
+    assert(l->size > 0);
+    return l->root.next->dat;
+}
+
+static inline cgs_type CGS_FUNCTION(back)(cgs_name *l) {
+    assert(l->size > 0);
+    return l->root.prev->dat;
 }
 
 static inline void CGS_FUNCTION(clear)(cgs_name *l) {

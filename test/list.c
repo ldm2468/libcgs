@@ -25,6 +25,7 @@ int test_sanity() {
 int test_push_pop() {
     dlist *list = dlist_new();
 
+    /* Push at the front, pop at the back (FIFO order) */
     for (int i = 0; i < TEST_COUNT; i++) {
         dlist_push_front(list, i);
     }
@@ -36,6 +37,7 @@ int test_push_pop() {
         CNIT_ASSERT(list->size == TEST_COUNT - 1 - i);
     }
 
+    /* Push at the back, pop at the front (Also FIFO) */
     for (int i = 0; i < TEST_COUNT; i++) {
         dlist_push_back(list, i);
     }
