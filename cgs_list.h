@@ -18,6 +18,10 @@
 
 typedef cgs_type CGS_FUNCTION(type);
 
+/**
+ * An internal node of the linked list implementation.
+ * It can be used like a C++ iterator in some functions.
+ */
 typedef struct CGS_FUNCTION(node) {
     cgs_type dat;
     struct CGS_FUNCTION(node) *prev, *next;
@@ -28,6 +32,10 @@ typedef struct {
     CGS_FUNCTION(node) root;
 } cgs_name;
 
+/**
+ * @brief Allocate and initialize a new list.
+ * @return A newly allocated and initialized list.
+ */
 static inline cgs_name *CGS_FUNCTION(new)() {
     cgs_name *res = malloc(sizeof(cgs_name));
     res->size = 0;
@@ -35,10 +43,23 @@ static inline cgs_name *CGS_FUNCTION(new)() {
     return res;
 }
 
+/**
+ * @brief Check whether the list is empty.
+ * @param l The list to query.
+ * @return Whether the list is empty.
+ */
 static inline bool CGS_FUNCTION(empty)(cgs_name *l) {
     return l->size == 0;
 }
 
+/**
+ * @brief Insert an element inside the list after the node n.
+ * n must be a valid node of list l, no error checking is provided.
+ * @param l The list to modify.
+ * @param n The node to insert after.
+ * @param e The element to insert.
+ * @return The newly created node with the inserted element.
+ */
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_name *l, CGS_FUNCTION(node) *n, cgs_type e) {
     CGS_FUNCTION(node) *node = malloc(sizeof(CGS_FUNCTION(node)));
     node->dat = e;
@@ -53,6 +74,14 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_name *l, CGS_FU
     return node;
 }
 
+/**
+ * @brief  Insert an element inside the list before the node n.
+ * n must be a valid node of list l, no error checking is provided.
+ * @param l The list to modify.
+ * @param n The node to insert before.
+ * @param e The element to insert.
+ * @return The newly created node with the inserted element.
+ */
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_before)(cgs_name *l, CGS_FUNCTION(node) *n, cgs_type e) {
     CGS_FUNCTION(node) *node = malloc(sizeof(CGS_FUNCTION(node)));
     node->dat = e;
@@ -67,6 +96,11 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_before)(cgs_name *l, CGS_F
     return node;
 }
 
+/**
+ * Erase a node in the list.
+ * @param l The list to modify.
+ * @param n The node to erase.
+ */
 static inline void CGS_FUNCTION(erase)(cgs_name *l, CGS_FUNCTION(node) *n) {
     assert(l->size > 0);
 
@@ -77,16 +111,24 @@ static inline void CGS_FUNCTION(erase)(cgs_name *l, CGS_FUNCTION(node) *n) {
     l->size--;
 }
 
-static inline void CGS_FUNCTION(splice_after)(cgs_name *t, cgs_name *f, CGS_FUNCTION(node) *n) {
+/**
+ * @brief Splice together two lists.
+ * All the elements of list f are moved to the list t after the node pos.
+ * After the operation, the list f becomes empty.
+ * @param t The list to splice to.
+ * @param pos The node to insert the contents of f after. It must be a node of list t.
+ * @param f The list to splice from. It becomes empty after this function finishes.
+ */
+static inline void CGS_FUNCTION(splice_after)(cgs_name *t, CGS_FUNCTION(node) *pos, cgs_name *f) {
     if (f->size == 0) {
         return;
     }
 
-    n->next->prev = f->root.prev;
-    f->root.prev->next = n->next;
+    pos->next->prev = f->root.prev;
+    f->root.prev->next = pos->next;
 
-    n->next = f->root.next;
-    f->root.next->prev = n;
+    pos->next = f->root.next;
+    f->root.next->prev = pos;
 
     f->root.next = f->root.prev = &f->root;
 
@@ -94,16 +136,24 @@ static inline void CGS_FUNCTION(splice_after)(cgs_name *t, cgs_name *f, CGS_FUNC
     f->size = 0;
 }
 
-static inline void CGS_FUNCTION(splice_before)(cgs_name *t, cgs_name *f, CGS_FUNCTION(node) *n) {
+/**
+ * @brief Splice together two lists.
+ * All the elements of list f are moved to the list t before the node pos.
+ * After the operation, the list f becomes empty.
+ * @param t The list to splice to.
+ * @param pos The node to insert the contents of f before. It must be a node of list t.
+ * @param f The list to splice from. It becomes empty after this function finishes.
+ */
+static inline void CGS_FUNCTION(splice_before)(cgs_name *t, CGS_FUNCTION(node) *pos, cgs_name *f) {
     if (f->size == 0) {
         return;
     }
 
-    n->prev->next = f->root.next;
-    f->root.next->prev = n->prev;
+    pos->prev->next = f->root.next;
+    f->root.next->prev = pos->prev;
 
-    n->prev = f->root.prev;
-    f->root.prev->next = n;
+    pos->prev = f->root.prev;
+    f->root.prev->next = pos;
 
     f->root.next = f->root.prev = &f->root;
 
@@ -111,48 +161,103 @@ static inline void CGS_FUNCTION(splice_before)(cgs_name *t, cgs_name *f, CGS_FUN
     f->size = 0;
 }
 
+/**
+ * @brief Pushes an element to the end of the list.
+ * @param l The list to modify.
+ * @param e The element to push.
+ */
 static inline void CGS_FUNCTION(push_back)(cgs_name *l, cgs_type e) {
     CGS_FUNCTION(insert_before)(l, &l->root, e);
 }
 
+/**
+ * @brief Pops an element from the end of the list and returns it.
+ * @param l The list to modify.
+ * @return The popped element at the end of the list.
+ */
 static inline cgs_type CGS_FUNCTION(pop_back)(cgs_name *l) {
     cgs_type res = l->root.prev->dat;
     CGS_FUNCTION(erase)(l, l->root.prev);
     return res;
 }
 
+/**
+ * @brief Pushes an element to the front of the list.
+ * @param l The list to modify.
+ * @param e The element to push.
+ */
 static inline void CGS_FUNCTION(push_front)(cgs_name *l, cgs_type e) {
     CGS_FUNCTION(insert_after)(l, &l->root, e);
 }
 
+/**
+ * @brief Pops an element from the front of the list and returns it.
+ * @param l The list to modify.
+ * @return The popped element at the front of the list.
+ */
 static inline cgs_type CGS_FUNCTION(pop_front)(cgs_name *l) {
     cgs_type res = l->root.next->dat;
     CGS_FUNCTION(erase)(l, l->root.next);
     return res;
 }
 
+/**
+ * @brief Returns the node that corresponds to the first element of the list.
+ * If the list is empty, returns sentinel_node().
+ * @param l The list to query.
+ * @return The node that represents the first element of the list.
+ */
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(front_node)(cgs_name *l) {
     return l->root.next;
 }
 
+/**
+ * @brief Returns the node that corresponds to the last element of the list.
+ * If the list is empty, returns sentinel_node().
+ * @param l The list to query.
+ * @return The node that represents the last element of the list.
+ */
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(back_node)(cgs_name *l) {
     return l->root.prev;
 }
 
+/**
+ * @brief Returns a node that does not correspond to any value.
+ * It represents the node "after" front_node(), or "before" back_node().
+ * Useful for loop conditions.
+ * @param l The list to query.
+ * @return The node that represents the bounds of the list.
+ */
 static inline CGS_FUNCTION(node) *CGS_FUNCTION(sentinel_node)(cgs_name *l) {
     return &l->root;
 }
 
+/**
+ * @brief Returns the first element in the list.
+ * Equivalent to front_node()->dat.
+ * @param l The list to query.
+ * @return The first element of the list.
+ */
 static inline cgs_type CGS_FUNCTION(front)(cgs_name *l) {
     assert(l->size > 0);
     return l->root.next->dat;
 }
 
+/**
+ * @brief Returns the last element in the list.
+ * Equivalent to back_node()->dat.
+ * @param l The list to query.
+ * @return The last element of the list.
+ */
 static inline cgs_type CGS_FUNCTION(back)(cgs_name *l) {
     assert(l->size > 0);
     return l->root.prev->dat;
 }
 
+/**
+ * @brief Removes all elements from the list.
+ * @param l The list to clear.
+ */
 static inline void CGS_FUNCTION(clear)(cgs_name *l) {
     CGS_FUNCTION(node) *curr = l->root.next, *next;
     while (curr != &l->root) {
@@ -164,6 +269,11 @@ static inline void CGS_FUNCTION(clear)(cgs_name *l) {
     l->size = 0;
 }
 
+/**
+ * @brief Frees the list and all of its data structures.
+ * If the list is not empty, it is cleared first.
+ * @param l The list to free.
+ */
 static inline void CGS_FUNCTION(free)(cgs_name *l) {
     CGS_FUNCTION(clear)(l);
     free(l);
