@@ -111,6 +111,22 @@ static inline cgs_type CGS_FUNCTION(erase)(cgs_name *v, size_t pos) {
 }
 
 /**
+ * @brief Finds the index of the first element identical to e.
+ * Returns -1 if there are no matches.
+ * @param l The vector to query.
+ * @param e The element to find.
+ * @return The index of the first element identical to e, or -1 if there are no matches.
+ */
+static inline size_t CGS_FUNCTION(find)(cgs_name *v, cgs_type e) {
+    for (size_t i = 0; i < v->size; i++) {
+        if (v->array[i] == e) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
  * @brief Remove all elements from the vector.
  * @param v The vector to use.
  */

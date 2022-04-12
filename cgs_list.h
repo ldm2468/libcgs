@@ -233,6 +233,20 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(sentinel_node)(cgs_name *l) {
 }
 
 /**
+ * @brief Finds the node of the first element identical to e.
+ * @param l The list to query.
+ * @param e The element to find.
+ * @return The node that represents the first element identical to e.
+ */
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(find)(cgs_name *l, cgs_type e) {
+    CGS_FUNCTION(node) *n = l->root.next;
+    while (n != &l->root && n->dat != e) {
+        n = n->next;
+    }
+    return n;
+}
+
+/**
  * @brief Returns the first element in the list.
  * Equivalent to front_node()->dat.
  * @param l The list to query.
