@@ -8,6 +8,11 @@
 #include "cgs_list.h"
 #define cgs_ilist 1
 
+#define cgs_type long long
+#define cgs_name llist
+#include "cgs_list.h"
+#define cgs_llist 1
+
 #define cgs_type char *
 #define cgs_name slist
 #include "cgs_list.h"
@@ -91,9 +96,47 @@ int test_foreach() {
     return 0;
 }
 
+int test_splice() {
+    llist *l0 = llist_new(), *l1 = llist_new(), *l2 = llist_new();
+    for (int i = 0; i < 100; i++) {
+        llist_push_back(l0, i);
+        llist_push_back(l1, 100 + i);
+        llist_push_back(l2, 200 + i);
+    }
+
+    llist_node *l1_center = llist_find(l1, 150);
+
+    llist_splice_after(l1, l1_center, l0);
+    CNIT_ASSERT(l0->size == 0);
+    CNIT_ASSERT(l1->size == 200);
+
+    llist_splice_before(l2, llist_front_node(l2), l1);
+    CNIT_ASSERT(l1->size == 0);
+    CNIT_ASSERT(l2->size == 300);
+
+    int i = 0;
+    cgs_list_foreach(llist, l2, n, e) {
+        if (i <= 50) {
+            CNIT_ASSERT(e == i + 100);
+        } else if (i <= 150) {
+            CNIT_ASSERT(e == i - 51);
+        } else {
+            CNIT_ASSERT(e == i);
+        }
+        i++;
+    }
+
+    llist_free(l0);
+    llist_free(l1);
+    llist_free(l2);
+
+    return 0;
+}
+
 int main() {
     cnit_add_test(test_sanity, "List sanity test");
     cnit_add_test(test_push_pop, "List push/pop");
     cnit_add_test(test_foreach, "List foreach");
+    cnit_add_test(test_splice, "List splice");
     return cnit_run_tests();
 }
