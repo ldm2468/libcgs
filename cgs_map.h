@@ -49,10 +49,12 @@ static inline uint32_t cgs_map_hash_str(const char *ptr) {
     return res;
 }
 
+#define CGS_FUNCTION(name) CGS_CAT(cgs_map_name, name)
+
 #endif
 
 /* semi include guard */
-#if !CGS_CAT(cgs, cgs_name)
+#if !CGS_CAT(cgs, cgs_map_name)
 
 typedef cgs_key CGS_FUNCTION(key);
 typedef cgs_value CGS_FUNCTION(value);
@@ -71,7 +73,7 @@ static inline uint32_t CGS_FUNCTION(hash)(cgs_key k) {
 
 typedef struct {
     // todo
-} cgs_name;
+} cgs_map_name;
 
 typedef struct {
     cgs_key key;
@@ -81,7 +83,7 @@ typedef struct {
 
 #undef cgs_key
 #undef cgs_value
-#undef cgs_name
+#undef cgs_map_name
 #undef cgs_map_default_hash
 #undef cgs_map_default_hash_str
 #endif /* include guard */

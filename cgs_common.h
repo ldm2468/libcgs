@@ -4,6 +4,5 @@
 #define CGS_CAT_HELPER(a, b) a##b
 #define CGS_CAT_HELPER2(a, b) CGS_CAT_HELPER(a##_, b)
 #define CGS_CAT(a, b) CGS_CAT_HELPER2(a, b)
-#define CGS_FUNCTION(name) CGS_CAT(cgs_name, name)
 
 #endif

@@ -5,21 +5,21 @@
 static inline uint32_t iimap_hash(int key) {
     return key;
 }
-#define cgs_name iimap
+#define cgs_map_name iimap
 #include "cgs_map.h"
 #define cgs_iimap 1
 
 #define cgs_key char *
 #define cgs_value int
 #define cgs_map_default_hash_str
-#define cgs_name simap
+#define cgs_map_name simap
 #include "cgs_map.h"
 #define cgs_simap 1
 
 #define cgs_key long
 #define cgs_value long
 #define cgs_map_default_hash
-#define cgs_name llmap
+#define cgs_map_name llmap
 #include "cgs_map.h"
 #define cgs_llmap 1
 
