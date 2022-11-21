@@ -1,14 +1,14 @@
-#define cgs_type double
+#define cgs_vec_type double
 #define cgs_vec_name dvec
 #include "cgs_vector.h"
 #define cgs_dvec 1
 
-#define cgs_type int
+#define cgs_vec_type int
 #define cgs_vec_name ivec
 #include "cgs_vector.h"
 #define cgs_ivec 1
 
-#define cgs_type char *
+#define cgs_vec_type char *
 #define cgs_vec_name svec
 #include "cgs_vector.h"
 #define cgs_svec 1

@@ -1,19 +1,19 @@
-#define cgs_type double
+#define cgs_list_type double
 #define cgs_list_name dlist
 #include "cgs_list.h"
 #define cgs_dlist 1
 
-#define cgs_type int
+#define cgs_list_type int
 #define cgs_list_name ilist
 #include "cgs_list.h"
 #define cgs_ilist 1
 
-#define cgs_type long long
+#define cgs_list_type long long
 #define cgs_list_name llist
 #include "cgs_list.h"
 #define cgs_llist 1
 
-#define cgs_type char *
+#define cgs_list_type char *
 #define cgs_list_name slist
 #include "cgs_list.h"
 #define cgs_slist 1

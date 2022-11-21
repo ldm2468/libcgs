@@ -17,14 +17,14 @@
 /* semi include guard */
 #if !CGS_CAT(cgs, cgs_list_name)
 
-typedef cgs_type CGS_FUNCTION(type);
+typedef cgs_list_type CGS_FUNCTION(type);
 
 /**
  * An internal node of the linked list implementation.
  * It can be used like a C++ iterator in some functions.
  */
 typedef struct CGS_FUNCTION(node) {
-    cgs_type dat;
+    cgs_list_type dat;
     struct CGS_FUNCTION(node) *prev, *next;
 } CGS_FUNCTION(node);
 
@@ -61,7 +61,7 @@ static inline bool CGS_FUNCTION(empty)(cgs_list_name *l) {
  * @param e The element to insert.
  * @return The newly created node with the inserted element.
  */
-static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_list_name *l, CGS_FUNCTION(node) *n, cgs_type e) {
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_list_name *l, CGS_FUNCTION(node) *n, cgs_list_type e) {
     CGS_FUNCTION(node) *node = malloc(sizeof(CGS_FUNCTION(node)));
     node->dat = e;
 
@@ -83,7 +83,7 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_after)(cgs_list_name *l, C
  * @param e The element to insert.
  * @return The newly created node with the inserted element.
  */
-static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_before)(cgs_list_name *l, CGS_FUNCTION(node) *n, cgs_type e) {
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(insert_before)(cgs_list_name *l, CGS_FUNCTION(node) *n, cgs_list_type e) {
     CGS_FUNCTION(node) *node = malloc(sizeof(CGS_FUNCTION(node)));
     node->dat = e;
 
@@ -167,7 +167,7 @@ static inline void CGS_FUNCTION(splice_before)(cgs_list_name *t, CGS_FUNCTION(no
  * @param l The list to modify.
  * @param e The element to push.
  */
-static inline void CGS_FUNCTION(push_back)(cgs_list_name *l, cgs_type e) {
+static inline void CGS_FUNCTION(push_back)(cgs_list_name *l, cgs_list_type e) {
     CGS_FUNCTION(insert_before)(l, &l->root, e);
 }
 
@@ -176,8 +176,8 @@ static inline void CGS_FUNCTION(push_back)(cgs_list_name *l, cgs_type e) {
  * @param l The list to modify.
  * @return The popped element at the end of the list.
  */
-static inline cgs_type CGS_FUNCTION(pop_back)(cgs_list_name *l) {
-    cgs_type res = l->root.prev->dat;
+static inline cgs_list_type CGS_FUNCTION(pop_back)(cgs_list_name *l) {
+    cgs_list_type res = l->root.prev->dat;
     CGS_FUNCTION(erase)(l, l->root.prev);
     return res;
 }
@@ -187,7 +187,7 @@ static inline cgs_type CGS_FUNCTION(pop_back)(cgs_list_name *l) {
  * @param l The list to modify.
  * @param e The element to push.
  */
-static inline void CGS_FUNCTION(push_front)(cgs_list_name *l, cgs_type e) {
+static inline void CGS_FUNCTION(push_front)(cgs_list_name *l, cgs_list_type e) {
     CGS_FUNCTION(insert_after)(l, &l->root, e);
 }
 
@@ -196,8 +196,8 @@ static inline void CGS_FUNCTION(push_front)(cgs_list_name *l, cgs_type e) {
  * @param l The list to modify.
  * @return The popped element at the front of the list.
  */
-static inline cgs_type CGS_FUNCTION(pop_front)(cgs_list_name *l) {
-    cgs_type res = l->root.next->dat;
+static inline cgs_list_type CGS_FUNCTION(pop_front)(cgs_list_name *l) {
+    cgs_list_type res = l->root.next->dat;
     CGS_FUNCTION(erase)(l, l->root.next);
     return res;
 }
@@ -239,7 +239,7 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(sentinel_node)(cgs_list_name *l) 
  * @param e The element to find.
  * @return The node that represents the first element identical to e.
  */
-static inline CGS_FUNCTION(node) *CGS_FUNCTION(find)(cgs_list_name *l, cgs_type e) {
+static inline CGS_FUNCTION(node) *CGS_FUNCTION(find)(cgs_list_name *l, cgs_list_type e) {
     CGS_FUNCTION(node) *n = l->root.next;
     while (n != &l->root && n->dat != e) {
         n = n->next;
@@ -253,7 +253,7 @@ static inline CGS_FUNCTION(node) *CGS_FUNCTION(find)(cgs_list_name *l, cgs_type 
  * @param l The list to query.
  * @return The first element of the list.
  */
-static inline cgs_type CGS_FUNCTION(front)(cgs_list_name *l) {
+static inline cgs_list_type CGS_FUNCTION(front)(cgs_list_name *l) {
     assert(l->size > 0);
     return l->root.next->dat;
 }
@@ -264,7 +264,7 @@ static inline cgs_type CGS_FUNCTION(front)(cgs_list_name *l) {
  * @param l The list to query.
  * @return The last element of the list.
  */
-static inline cgs_type CGS_FUNCTION(back)(cgs_list_name *l) {
+static inline cgs_list_type CGS_FUNCTION(back)(cgs_list_name *l) {
     assert(l->size > 0);
     return l->root.prev->dat;
 }
@@ -294,6 +294,6 @@ static inline void CGS_FUNCTION(free)(cgs_list_name *l) {
     free(l);
 }
 
-#undef cgs_type
+#undef cgs_list_type
 #undef cgs_list_name
 #endif /* semi include guard */
