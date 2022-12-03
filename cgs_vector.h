@@ -19,7 +19,7 @@ typedef cgs_vec_type CGS_VECTOR(type);
 
 #define CGS_VECTOR_INIT_CAPACITY 8
 
-typedef struct {
+typedef struct cgs_vec_name {
     cgs_vec_type *array;
     size_t size, capacity;
 } cgs_vec_name;
