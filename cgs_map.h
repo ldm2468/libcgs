@@ -1,5 +1,6 @@
 /**
- * An unordered map, implemented with a hash table using linear hashing.
+ * @file cgs_map.h
+ * @brief An unordered map, implemented with a hash table using linear hashing.
  *
  * Define the following macros before including the header to customize the map.
  * - cgs_map_name: Required. The name of the generated map type. (e.g. `my_map`)
@@ -17,7 +18,9 @@
  * The default hashing functions do not support pointers to variable length data.
  * Instead, the hashing function must be manually defined with the following signature prior to including
  * this header. Replace `<cgs_map_name>` with the defined map name.
- * ```static inline uint32_t <cgs_map_name>_hash(cgs_map_key k)```
+ * ```
+ * static inline uint32_t <cgs_map_name>_hash(cgs_map_key k)
+ * ```
  */
 
 #include "cgs_common.h"
@@ -171,7 +174,7 @@ static inline cgs_map_name *CGS_MAP(new)() {
     return m;
 }
 
-/* Maps the 32-bit hash to the length of the map's backing vector. */
+/** @private Maps the 32-bit hash to the length of the map's backing vector. */
 static inline size_t CGS_MAP_INTERNAL(normalize_hash)(cgs_map_name *m, uint32_t hash) {
     size_t low_hash = hash & (m->hash_base - 1);
     if (low_hash < m->split_index) {
@@ -179,7 +182,7 @@ static inline size_t CGS_MAP_INTERNAL(normalize_hash)(cgs_map_name *m, uint32_t 
     }
     return low_hash;
 }
-/* Finds the entry with the given key in a bucket. */
+/** @private Finds the entry with the given key in a bucket. */
 static inline CGS_MAP(entry) *CGS_MAP_INTERNAL(find_entry)(cgs_map_name *m, size_t low_hash, cgs_map_key key) {
     CGS_MAP(entry) *entry = CGS_MAP_INTERNAL(vec_at)(m->vec, low_hash);
     while (entry != NULL && entry->key != key) {
@@ -188,14 +191,14 @@ static inline CGS_MAP(entry) *CGS_MAP_INTERNAL(find_entry)(cgs_map_name *m, size
     return entry;
 }
 
-/* Inserts an entry to the global list. */
+/** @private Inserts an entry to the global list. */
 static inline void CGS_MAP_INTERNAL(insert_entry)(cgs_map_name *m, CGS_MAP(entry) *entry) {
     entry->prev = m->root.prev;
     entry->next = &m->root;
     entry->prev->next = entry->next->prev = entry;
 }
 
-/* Splits a bucket with linear hashing. */
+/** @private Splits a bucket with linear hashing. */
 static inline void CGS_MAP_INTERNAL(split)(cgs_map_name *m) {
     CGS_MAP_INTERNAL(vec_push_back)(m->vec, NULL);
 

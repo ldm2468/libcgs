@@ -1,3 +1,23 @@
+/**
+ * @file cgs_list.h
+ * @brief A linked list with basic iteration macros.
+ *
+ * Define the following macros before including the header.
+ * - cgs_list_name: The name of the generated list type. (e.g. `my_list`)
+ * - cgs_list_type: The type of the elements. (e.g. `int`, `char *`)
+ *
+ * After the header is included, define the macro `cgs_<cgs_list_name>` to 1.
+ * This is to prevent clashes from multiple includes.
+ *
+ * For example, the following code generates the type `dlist` as a list of doubles.
+ * ```
+ * #define cgs_list_type double
+ * #define cgs_list_name dlist
+ * #include "cgs_list.h"
+ * #define cgs_dlist 1
+ * ```
+ */
+
 #include "cgs_common.h"
 #include <stdlib.h>
 #include <stdbool.h>

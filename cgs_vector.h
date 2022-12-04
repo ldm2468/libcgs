@@ -1,3 +1,23 @@
+/**
+ * @file cgs_vector.h
+ * @brief A variable-length vector, backed with an array.
+ *
+ * Define the following macros before including the header.
+ * - cgs_vec_name: The name of the generated vector type. (e.g. `my_vector`)
+ * - cgs_vec_type: The type of the elements. (e.g. `int`, `char *`)
+ *
+ * After the header is included, define the macro `cgs_<cgs_vec_name>` to 1.
+ * This is to prevent clashes from multiple includes.
+ *
+ * For example, the following code generates the type `dvec` as a vector of doubles.
+ * ```
+ * #define cgs_vec_type double
+ * #define cgs_vec_name dvec
+ * #include "cgs_vector.h"
+ * #define cgs_dvec 1
+ * ```
+ */
+
 #include "cgs_common.h"
 #include <stdlib.h>
 #include <stdbool.h>
