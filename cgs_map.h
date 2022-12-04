@@ -21,6 +21,22 @@
  * ```
  * static inline uint32_t <cgs_map_name>_hash(cgs_map_key k)
  * ```
+ *
+ * After the header is included, define the macro `cgs_<cgs_map_name>` to 1.
+ * This is to prevent clashes from multiple includes.
+ *
+ * For example, the following code generates the type `idmap` with `int`->`double` key-value types,
+ * and a load factor of 0.6.
+ *
+ * ```
+ * #define cgs_map_key int
+ * #define cgs_map_value double
+ * #define cgs_map_load_factor 60
+ * #define cgs_map_default_hash
+ * #define cgs_map_name idmap
+ * #include "cgs_map.h"
+ * #define cgs_idmap 1
+ * ```
  */
 
 #include "cgs_common.h"
