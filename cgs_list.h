@@ -27,8 +27,27 @@
 /* Common macros (include only once) */
 #ifndef CGS_LIST_H
 #define CGS_LIST_H
+/**
+ * @brief Generates a for-each loop.
+ *
+ * The parameters `n` and `e` are defined inside the macro, so they should not be defined outside.
+ * The node variable `n` may be useful for functions such as `XXX_erase()`.
+ *
+ * @param t The name of the list type. (e.g. `my_list`)
+ * @param l The list to iterate on.
+ * @param n The variable that holds the current node.
+ * @param e The variable that holds the current element.
+ */
 #define cgs_list_foreach(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, front_node)(l), *n##__n = n->next; n; n = NULL) \
                                          for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->next, e = n->dat)
+/**
+ * @brief Generates a for-each loop that iterates in reverse.
+ *
+ * @param t The name of the list type. (e.g. `my_list`)
+ * @param l The list to iterate on.
+ * @param n The variable that holds the current node.
+ * @param e The variable that holds the current element.
+ */
 #define cgs_list_foreach_r(t, l, n, e) for (CGS_CAT(t, node) *n = CGS_CAT(t, back_node)(l), *n##__n = n->prev; n; n = NULL) \
                                            for (CGS_CAT(t, type) e = n->dat; n != &(l)->root; n = n##__n, n##__n = n->prev, e = n->dat)
 #define CGS_LIST(name) CGS_CAT(cgs_list_name, name)
